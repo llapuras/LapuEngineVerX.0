@@ -1,0 +1,189 @@
+﻿  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_widgets.cpp
+  main.cpp
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\UI.h(79,1): warning C4305: “参数”: 从“double”到“float”截断
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\UI.h(84,1): warning C4305: “参数”: 从“double”到“float”截断
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Mesh.h(85,1): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(107,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(108,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(109,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(112,32): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(113,32): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(114,32): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(122,39): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(123,39): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(129,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(130,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(131,33): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(134,35): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(135,35): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Model.h(136,35): warning C4244: “=”: 从“TReal”转换到“T”，可能丢失数据
+          with
+          [
+              TReal=ai_real
+          ]
+          and
+          [
+              T=float
+          ]
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\Heightmap.h(77,38): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\main.cpp(23,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\main.cpp(24,13): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\main.cpp(162,22): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\main.cpp(64,8): warning C4101: “lit”: 未引用的局部变量
+D:\GOLF_GAME\previouse_cw\PreviousGraphics\OpenGLLab-master\Cursework Project\OpenGLLab\main.cpp(350,28): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  stb_image.cpp
+LINK : warning LNK4098: 默认库“MSVCRTD”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+  正在生成代码
+LINK : fatal error C1001: 编译器中发生内部错误。
+  (编译器文件“d:\agent\_work\4\s\src\vctools\Compiler\Utc\src\p2\main.c”，第 166 行)
+   要解决此问题，请尝试简化或更改上面所列位置附近的程序。
+  请选择 Visual C++
+  “帮助”菜单上的“技术支持”命令，或打开技术支持帮助文件来获得详细信息。
+    link!InvokeCompilerPass()+0x2e7e7
+    link!InvokeCompilerPass()+0x21fc9
+    link!InvokeCompilerPass()+0x21eea
+    link!InvokeCompilerPass()+0x2d927
+  
+LINK : fatal error C1001: 编译器中发生内部错误。
+  (编译器文件“d:\agent\_work\4\s\src\vctools\Compiler\Utc\src\p2\main.c”，第 166 行)
+   要解决此问题，请尝试简化或更改上面所列位置附近的程序。
+  请选择 Visual C++
+  “帮助”菜单上的“技术支持”命令，或打开技术支持帮助文件来获得详细信息。
+    link!InvokeCompilerPass()+0x2e7e7
+    link!InvokeCompilerPass()+0x21fc9
+    link!InvokeCompilerPass()+0x21eea
+    link!InvokeCompilerPass()+0x2d927
+  
+  
+LINK : fatal error LNK1000: Internal error during IMAGE::BuildImage
+  
+    Version 14.24.28316.0
+  
+    ExceptionCode            = C0000005
+    ExceptionFlags           = 00000000
+    ExceptionAddress         = 53F29182 (53A80000) "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\bin\HostX86\x64\c2.dll"
+    NumberParameters         = 00000002
+    ExceptionInformation[ 0] = 00000000
+    ExceptionInformation[ 1] = 00000000
+  
+  CONTEXT:
+    Eax    = 00000000  Esp    = 0095E440
+    Ebx    = 00000000  Ebp    = 0095E450
+    Ecx    = 00001505  Esi    = 00000000
+    Edx    = 00000000  Edi    = 00000000
+    Eip    = 53F29182  EFlags = 00010246
+    SegCs  = 00000023  SegDs  = 0000002B
+    SegSs  = 0000002B  SegEs  = 0000002B
+    SegFs  = 00000053  SegGs  = 0000002B
+    Dr0    = 00000000  Dr3    = 00000000
+    Dr1    = 00000000  Dr6    = 00000000
+    Dr2    = 00000000  Dr7    = 00000000
