@@ -28,7 +28,6 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-
 void AddGameObject(string path) {
 	Model newgo("Model/land/land.obj");
 
@@ -81,9 +80,9 @@ int main()
 	//EnvirMap Scene
 	Model castle("Model/land/monu9.obj");
 	Model board("Model/land/land.obj");
-	SceneNode* root2 = new SceneNode(board, "root2");
-	SceneNode* castlex = new SceneNode(castle, "bush");
-	root2->AddChild(castlex);
+	//SceneNode* root2 = new SceneNode(board, "root2");
+	//SceneNode* castlex = new SceneNode(castle, "bush");
+	//root2->AddChild(castlex);
 
 	
 	//No Shadow Scene
@@ -99,8 +98,12 @@ int main()
 	Model tree("Model/land/tree.obj");
 	Model lamp("Model/land/lamp01.obj");
 	Model piano("Model/POD.obj");
+	Model empty("");
 
-	SceneNode* root = new SceneNode(landx, "root");
+	SceneNode* root = new SceneNode(empty, "Base");
+
+	SceneNode* trees = new SceneNode(empty, "Trees");
+	SceneNode* mushrooms = new SceneNode(empty, "Mushroom");
 	SceneNode* bush_child = new SceneNode(bush, "bush");
 	SceneNode* tree_child = new SceneNode(tree, "tree");
 	SceneNode* tree_child01 = new SceneNode(tree, "tree01");
@@ -109,18 +112,20 @@ int main()
 	SceneNode* mushroom_child02 = new SceneNode(mushroom, "mushroom02");
 	SceneNode* mushroom_child03 = new SceneNode(mushroom, "mushroom03");
 	SceneNode* lamp_child = new SceneNode(lamp, "lamp");
-
 	SceneNode* pianox = new SceneNode(piano, "piano");
 
-	//root->AddChild(bush_child);
-	//root->AddChild(tree_child);
-	//root->AddChild(tree_child01);
-	//root->AddChild(campfire_child);
-	//root->AddChild(mushroom_child01);
-	//root->AddChild(mushroom_child02);
-	//root->AddChild(mushroom_child03);
-	//root->AddChild(lamp_child);
+	trees->AddChild(tree_child);
+	trees->AddChild(tree_child01);
+	lamp_child->AddChild(campfire_child);
+	mushrooms->AddChild(mushroom_child01);
+	mushrooms->AddChild(mushroom_child02);
+	mushrooms->AddChild(mushroom_child03);
+	root->AddChild(trees);
+	root->AddChild(lamp_child);
+	root->AddChild(mushrooms);
+	root->AddChild(pianox);
 
+	cout<< root->GetAllChildsCounts()<<endl;
 	Model monu9("Model/land/monu9.obj");
 	SceneNode* castle_child = new SceneNode(monu9, "land");
 	
@@ -219,20 +224,20 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 
 		if (transform_isvisible) {
-			root->SetVisible(transform_isvisible);
-			root->AddChild(pianox);
+		
 		}
 		else {
-			//root->DeleteChild(castle_child);		
-			root->SetVisible(transform_isvisible);
+			//root->DeleteChild(pianox);
+			
 		}
+		pianox->SetVisible(transform_isvisible);
 
 		//root->worldTransform = glm::vec3(-20, -26, 23);
 		//root->Draw(camera, simpleDepthShader);
 
 		if (isShowShadow) {
-			root->worldTransform = glm::vec3(-20, -26, 23);
-			root->Draw(camera, shader);
+			//root->worldTransform = glm::vec3(-20, -26, 23);
+			//root->Draw(camera, shader);
 		}
 
 		watershader.setInt("DRAG_MULT", DRAG_MULT);
@@ -274,6 +279,11 @@ int main()
 		sky.DrawSkyBox(camera, sky.shader);
 		ui.Render(window);
 
+		ui_root = root;
+		/*const char* name = (ui_root->name).c_str();
+		cout << name << endl;*/
+
+		//cout << root->GetChildCounts() << endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

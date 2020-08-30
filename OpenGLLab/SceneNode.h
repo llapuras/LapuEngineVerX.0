@@ -11,8 +11,10 @@
 class SceneNode {
 public:
 	SceneNode* parent;
-	string name;
+	const char* name;
 	Model model;
+	int childcount = 0;
+	int allchildcount = 0;
 	std::vector<SceneNode*> children;
 	glm::vec3 transform;
 	glm::vec3 modelScale;
@@ -21,7 +23,17 @@ public:
 	float scale = 1.0f;
 	bool isVisible = true;
 
-	SceneNode(Model nodemodel, string name = "GameObject", SceneNode* parent = NULL) {
+	SceneNode(const char* name = "GameObject", SceneNode* parent = NULL) {
+		this->model = Model();
+		this->name = name;
+		modelScale = glm::vec3(1, 1, 1);
+		transform = glm::vec3(0, 0, 0);
+		worldTransform = glm::vec3(0, 0, 0);
+		worldScale = glm::vec3(1, 1, 1);
+		this->parent = parent;
+	}
+
+	SceneNode(Model nodemodel, const char* name = "GameObject", SceneNode* parent = NULL) {
 		this->model = nodemodel;
 		this->name = name;
 		modelScale = glm::vec3(1, 1, 1);
@@ -54,9 +66,8 @@ public:
 			children.pop_back();
 		}
 		else {
-			
-		}
 		
+		}	
 	}
 
 	void Draw(Camera camera, Shader shader) {
@@ -76,8 +87,39 @@ public:
 			}
 		}
 		else {
-
 		}
+	}
+
+	bool IsExit(const char* name) {
+		for (vector <SceneNode*>::const_iterator i = this->GetChildIteratorStart(); i != this->GetChildIteratorEnd(); ++i) {
+			if((*i)->name == name)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	//get all childs count(include 1st one)
+	int GetAllChildsCounts() {
+		for (vector <SceneNode*>::const_iterator i = this->GetChildIteratorStart(); i != this->GetChildIteratorEnd(); ++i) {
+			allchildcount++;
+			allchildcount+=(*i)->GetAllChildsCounts();
+		}
+		return allchildcount;
+	}
+	
+	//get 1st layer childs count
+	int GetChildCounts() {
+		childcount = 0;
+		for (vector <SceneNode*>::const_iterator i = this->GetChildIteratorStart(); i != this->GetChildIteratorEnd(); ++i) {
+			childcount++;
+		}
+		return childcount;
+	}
+
+	const char* GetObjectNameList() {
+		const char* lines;
+		return lines;
 	}
 
 	std::vector<SceneNode*>::const_iterator GetChildIteratorStart() {

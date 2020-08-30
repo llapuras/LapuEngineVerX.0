@@ -1,12 +1,18 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <string>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
 #include "ImageLoader.h"
+#include "SceneNode.h"
+
+
+
+SceneNode* ui_root = NULL;
 
 bool LoadTextureFromFile(char const* filename, GLuint* out_texture, int* out_width, int* out_height);
 ImageLoader uiImg;
@@ -82,33 +88,62 @@ public:
 		//Main UI Board
 		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 		ImGui::SetNextWindowSize(boardSize);
-		InspectorBoard();
+		SceneTreeBoard(); 
 		ImGui::SetNextWindowPos(window_pos2, ImGuiCond_Always, window_pos_pivot2);
 		ImGui::SetNextWindowSize(boardSize);
-		SceneTreeBoard();
+		InspectorBoard();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	};
 
+	void DrawSceneTree(SceneNode* xnode) {
+		if (xnode != nullptr) {		
+			//cout << xnode->GetChildCounts() << endl;
+			if (xnode->GetChildCounts() > 1) {
+				//ImGui::SetNextItemOpen(true);
+				if (ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					for (vector <SceneNode*>::const_iterator i = xnode->GetChildIteratorStart(); i != xnode->GetChildIteratorEnd(); ++i)
+					{
+						DrawSceneTree(*i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			else {	
+				ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+			}
+		}		
+	}
+	
 
 	bool SceneTreeBoard() {
+
+		int obj_selected = -1;
+
+
 		ImGui::Begin("Scene Tree", NULL);
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
 
-		if (ImGui::TreeNode("Transform"))
-		{
-			//ImGui::ShowStyleEditor();
-			ImGui::Checkbox("is visible", &transform_isvisible);
+		//search box
+		static ImGuiTextFilter filter;
+		filter.Draw();
+		const char* lines[] = { "aaaa" };//需要改成tree里的名字合集
+		for (int i = 0; i < IM_ARRAYSIZE(lines); i++)
+			if (filter.PassFilter(lines[i]))
+				ImGui::BulletText("%s", lines[i]);
 
-			ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
-			ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
+		ImGui::Separator();
 
-			ImGui::TreePop();
-			ImGui::Separator();
-		}
+		//scene list
+		DrawSceneTree(ui_root);
+
+		ImGui::Separator();
+
+
 
 		ImGui::End();
 
@@ -124,29 +159,26 @@ public:
 		static int vec4i[4] = { 1, 5, 100, 255 };
 		static float vec4f[4] = { 0.10f, 0.20f, 0.30f, 0.44f };
 
-		if (ImGui::TreeNode("Transform"))
-		{
-			//ImGui::ShowStyleEditor();
-			ImGui::Checkbox("is visible", &transform_isvisible);
+		//ImGui::ShowStyleEditor();
+		ImGui::Checkbox("is visible", &transform_isvisible);
 
-			ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
-			ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
+		ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
+		ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
 
-			//object info
-			ImGui::Separator();
+		//object info
+		ImGui::Separator();
 
-			ImGui::Text("Info");
+		ImGui::Text("Info");
 
-			if (transform_isvisible) {
-				ImGui::Text("Active");
-			}
-			else {
-				ImGui::Text("Not Active");
-			}
+		if (transform_isvisible) {
+			ImGui::Text("Active");
+		}
+		else {
+			ImGui::Text("Not Active");
+		}
 
-			ImGui::TreePop();
-			ImGui::Separator();
-		}	
+		ImGui::Separator();
+		
 		ImGui::End();
 	}
 

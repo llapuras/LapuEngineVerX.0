@@ -36,9 +36,13 @@ public:
 
 	/*  Functions   */
 	// constructor, expects a filepath to a 3D model.
-	Model(string const& path = "Model/land/monu9.obj", bool gamma = false) : gammaCorrection(gamma)
+
+
+	Model(const char* path = "Model/land/monu9.obj", bool gamma = false) : gammaCorrection(gamma)
 	{
-		loadModel(path);
+		if (path != "") {
+			loadModel(path);
+		}
 	}
 
 	// draws the model, and thus all its meshes
