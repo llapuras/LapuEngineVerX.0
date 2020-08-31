@@ -20,14 +20,18 @@ public:
 	glm::vec3 modelScale;
 	glm::vec3 worldTransform;
 	glm::vec3 worldScale;
+	glm::vec3 rotation;
 	float scale = 1.0f;
 	bool isVisible = true;
+
+	const char* namelist = nullptr;
 
 	SceneNode(const char* name = "GameObject", SceneNode* parent = NULL) {
 		this->model = Model();
 		this->name = name;
 		modelScale = glm::vec3(1, 1, 1);
 		transform = glm::vec3(0, 0, 0);
+		rotation = glm::vec3(0, 0, 0);
 		worldTransform = glm::vec3(0, 0, 0);
 		worldScale = glm::vec3(1, 1, 1);
 		this->parent = parent;
@@ -39,6 +43,7 @@ public:
 		modelScale = glm::vec3(1, 1, 1);
 		transform = glm::vec3(0, 0, 0);
 		worldTransform = glm::vec3(0, 0, 0);
+		rotation = glm::vec3(0, 0, 0);
 		worldScale = glm::vec3(1, 1, 1);
 		this->parent = parent;
 	}
@@ -70,23 +75,47 @@ public:
 		}	
 	}
 
+	//in all childs range
+	SceneNode* FindNodeInChildsByName(const char* name) {
+		for (vector <SceneNode*>::const_iterator i = this->GetChildIteratorStart(); i != this->GetChildIteratorEnd(); ++i) {
+			if ((*i)->name == name) {
+				cout << (*i)->name << endl;
+				return *i;
+			}
+			else {
+				(*i)->FindNodeInChildsByName(name);
+			}
+		}
+		return this;
+	}
+
 	void Draw(Camera camera, Shader shader) {
 		if (this->isVisible) {//only visible go can be drawn
 			for (vector <SceneNode*>::const_iterator i = this->GetChildIteratorStart(); i != this->GetChildIteratorEnd(); ++i) {
-				shader.use();
-				glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-				glm::mat4 view = camera.GetViewMatrix();
-				shader.setMat4("projection", projection);
-				shader.setMat4("view", view);
-				glm::mat4 modelmat4 = glm::mat4(1.0f);
-				modelmat4 = glm::scale(modelmat4, (*i)->modelScale * worldScale);	// it's a bit too big for our scene, so scale it down
-				modelmat4 = glm::translate(modelmat4, (*i)->transform + worldTransform / ((*i)->scale)); // translate it down so it's at the center of the scene
-				shader.setMat4("model", modelmat4);
-				((*i)->model).Draw(shader);
-				//cout << ((*i)->name) << endl;
+				if ((*i)->isVisible) {
+					shader.use();
+					glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+					glm::mat4 view = camera.GetViewMatrix();
+					shader.setMat4("projection", projection);
+					shader.setMat4("view", view);
+					glm::mat4 modelmat4 = glm::mat4(1.0f);
+					modelmat4 = glm::scale(modelmat4, (*i)->modelScale * worldScale);	// it's a bit too big for our scene, so scale it down
+					modelmat4 = glm::translate(modelmat4, (*i)->transform + worldTransform / ((*i)->scale)); // translate it down so it's at the center of the scene
+					//rotation
+					modelmat4 = glm::rotate(modelmat4, glm::radians((*i)->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));//xaxis
+					modelmat4 = glm::rotate(modelmat4, glm::radians((*i)->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));//yaxis
+					modelmat4 = glm::rotate(modelmat4, glm::radians((*i)->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));//zaxis
+					shader.setMat4("model", modelmat4);
+					((*i)->model).Draw(shader);
+
+					//draw childs
+					(*i)->Draw(camera, shader);
+				}
 			}
 		}
 		else {
+			cout<<"aaaaaaaaaaaaaaaaa"<<endl;
+			return;
 		}
 	}
 
@@ -117,9 +146,8 @@ public:
 		return childcount;
 	}
 
-	const char* GetObjectNameList() {
-		const char* lines;
-		return lines;
+	void GetObjectNameList() {
+		//namelist.
 	}
 
 	std::vector<SceneNode*>::const_iterator GetChildIteratorStart() {

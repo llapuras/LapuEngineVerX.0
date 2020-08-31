@@ -14,6 +14,9 @@
 
 SceneNode* ui_root = NULL;
 
+int scenelistcount=0;
+bool node_clicked = -1;
+
 bool LoadTextureFromFile(char const* filename, GLuint* out_texture, int* out_width, int* out_height);
 ImageLoader uiImg;
 
@@ -30,6 +33,8 @@ bool transform_isvisible = true;
 
 float pos[3] = { 1.0f,1.0f,1.0f};
 float scale[3] = { 1.0f,1.0f,1.0f};
+float rotation[3] = { 1.0f,1.0f,1.0f };
+
 
 //water
 float DRAG_MULT = .001f;
@@ -89,6 +94,9 @@ public:
 		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 		ImGui::SetNextWindowSize(boardSize);
 		SceneTreeBoard(); 
+		static bool selection[] = { false, false, false, false, false };
+
+
 		ImGui::SetNextWindowPos(window_pos2, ImGuiCond_Always, window_pos_pivot2);
 		ImGui::SetNextWindowSize(boardSize);
 		InspectorBoard();
@@ -101,8 +109,12 @@ public:
 		if (xnode != nullptr) {		
 			//cout << xnode->GetChildCounts() << endl;
 			if (xnode->GetChildCounts() > 1) {
-				//ImGui::SetNextItemOpen(true);
-				if (ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_DefaultOpen))
+				bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)xnode->name, ImGuiTreeNodeFlags_DefaultOpen, xnode->name, xnode->name);
+				if (ImGui::IsItemClicked()) {
+					node_clicked = xnode->name;
+					cout << xnode->name << endl;
+				}
+				if (node_open)
 				{
 					for (vector <SceneNode*>::const_iterator i = xnode->GetChildIteratorStart(); i != xnode->GetChildIteratorEnd(); ++i)
 					{
@@ -113,15 +125,19 @@ public:
 			}
 			else {	
 				ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+				if (ImGui::IsItemClicked()) {
+					node_clicked = xnode->name;
+					cout << xnode->name << endl;
+				}
 			}
 		}		
 	}
 	
 
 	bool SceneTreeBoard() {
-
 		int obj_selected = -1;
-
+		if (ImGui::IsItemClicked())
+			cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas"<<endl;
 
 		ImGui::Begin("Scene Tree", NULL);
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -141,7 +157,6 @@ public:
 		//scene list
 		DrawSceneTree(ui_root);
 
-		ImGui::Separator();
 
 
 
@@ -156,14 +171,13 @@ public:
 		if (window->SkipItems)
 			return false;
 		
-		static int vec4i[4] = { 1, 5, 100, 255 };
-		static float vec4f[4] = { 0.10f, 0.20f, 0.30f, 0.44f };
-
-		//ImGui::ShowStyleEditor();
+		//visible
 		ImGui::Checkbox("is visible", &transform_isvisible);
 
 		ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
 		ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
+		ImGui::DragFloat3("Rotation", (float*)&rotation, 1.0f, -360.0f, 360, "%.0f");
+
 
 		//object info
 		ImGui::Separator();

@@ -30,7 +30,6 @@ float lastFrame = 0.0f;
 
 void AddGameObject(string path) {
 	Model newgo("Model/land/land.obj");
-
 }
 
 int main()
@@ -91,7 +90,7 @@ int main()
 	PointLight pointLight;
 	PointLight pointLight02;
 	SpotLight spotLight01;
-	Model landx("Model/land/land.obj");
+	Model landx("Model/swing.obj");
 	Model bush("Model/land/bush.obj");
 	Model campfire("Model/land/campfire.obj");
 	Model mushroom("Model/land/mushroom.obj");
@@ -100,7 +99,7 @@ int main()
 	Model piano("Model/POD.obj");
 	Model empty("");
 
-	SceneNode* root = new SceneNode(empty, "Base");
+	SceneNode* root = new SceneNode(landx, "Base");
 
 	SceneNode* trees = new SceneNode(empty, "Trees");
 	SceneNode* mushrooms = new SceneNode(empty, "Mushroom");
@@ -112,23 +111,25 @@ int main()
 	SceneNode* mushroom_child02 = new SceneNode(mushroom, "mushroom02");
 	SceneNode* mushroom_child03 = new SceneNode(mushroom, "mushroom03");
 	SceneNode* lamp_child = new SceneNode(lamp, "lamp");
-	SceneNode* pianox = new SceneNode(piano, "piano");
+	SceneNode* pianox[4];
 
-	trees->AddChild(tree_child);
-	trees->AddChild(tree_child01);
-	lamp_child->AddChild(campfire_child);
-	mushrooms->AddChild(mushroom_child01);
-	mushrooms->AddChild(mushroom_child02);
-	mushrooms->AddChild(mushroom_child03);
-	root->AddChild(trees);
-	root->AddChild(lamp_child);
-	root->AddChild(mushrooms);
-	root->AddChild(pianox);
+	const char* namex = "Pod0";
+	for (int i = 0; i < 4; i++) {
+		pianox[i] = new SceneNode(landx, namex);
+		root->AddChild(pianox[i]);
+	}
 
-	cout<< root->GetAllChildsCounts()<<endl;
-	Model monu9("Model/land/monu9.obj");
-	SceneNode* castle_child = new SceneNode(monu9, "land");
-	
+	//trees->AddChild(tree_child);
+	//trees->AddChild(tree_child01);
+	//lamp_child->AddChild(campfire_child);
+	//mushrooms->AddChild(mushroom_child01);
+	//mushrooms->AddChild(mushroom_child02);
+	//mushrooms->AddChild(mushroom_child03);
+	//root->AddChild(trees);
+	//root->AddChild(lamp_child);
+	//root->AddChild(mushrooms);
+
+	//cout<< root->FindNodeInChildsByName("campfire")->name <<endl;
 
 	tree_child->transform = glm::vec3(-2, 0, -3);
 	tree_child01->transform = glm::vec3(3, 0, -2);
@@ -204,9 +205,19 @@ int main()
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 
-		pianox->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
-		pianox->scale = 2;
-		pianox->transform = glm::vec3(pos[0], pos[1], pos[2]);
+		
+
+		for (int i = 0; i < 4; i++) {
+			pianox[i]->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
+			pianox[i]->scale = 2;
+			pianox[i]->transform = glm::vec3(pos[0]+10*i-20, pos[1], pos[2]);
+			pianox[i]->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);
+
+			root->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
+			root->scale = 2;
+			root->transform = glm::vec3(pos[0] + 10 * i - 20, pos[1], pos[2]);
+			root->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);
+		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -224,13 +235,13 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 
 		if (transform_isvisible) {
-		
+			pianox[2]->SetVisible(transform_isvisible);
 		}
 		else {
-			//root->DeleteChild(pianox);
-			
+			pianox[2]->SetVisible(transform_isvisible);
 		}
-		pianox->SetVisible(transform_isvisible);
+
+		//cout << (pianox[2]->isVisible) << endl;
 
 		//root->worldTransform = glm::vec3(-20, -26, 23);
 		//root->Draw(camera, simpleDepthShader);

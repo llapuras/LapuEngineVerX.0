@@ -243,7 +243,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		std::cout << "QAQ Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(data);
 	}
 
