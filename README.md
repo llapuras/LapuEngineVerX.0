@@ -37,3 +37,4 @@ A coarse opengl renderer.
 ### Finished ✅
 
 - obj model rendering
+- anti anliasing
