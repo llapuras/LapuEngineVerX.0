@@ -97,9 +97,19 @@ public:
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+		glm::mat4 model = glm::mat4(1.0f);
+		//rotation
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
+		shader.setMat4("model", model);
+
+		//color
+		shader.setVec4("skytop", glm::vec4(skytopcolor.x, skytopcolor.y, skytopcolor.z, skytopcolor.w));
+		shader.setVec4("skyhorizon", glm::vec4(skyhorizoncolor.x, skyhorizoncolor.y, skyhorizoncolor.z, skyhorizoncolor.w));
+		//shader.setFloat("deltatime", (float)glfwGetTime()*100);
+		shader.setFloat("horizonintensity", horizonintensity);
 
 		// skybox cube
 		glBindVertexArray(skyboxVAO);

@@ -1,14 +1,29 @@
-#version 330 core
-layout (location = 0) in vec3 aPos;
+#version 330
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 normal;
 
-out vec3 TexCoords;
+out Data
+{
+    vec4 eyespace_position;
+    vec4 eyespace_normal;
+    vec4 worldspace_position;
+    vec4 raw_position;
+} vtx_data;
 
-uniform mat4 projection;
+uniform mat4 model;
 uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
-    TexCoords = aPos;
-    vec4 pos = projection * view * vec4(aPos, 1.0);
-    gl_Position = pos.xyww;
-}  
+    mat4 view_without_translation = view;
+    view_without_translation[3][0] = 0.0f;
+    view_without_translation[3][1] = 0.0f;
+    view_without_translation[3][2] = 0.0f;
+
+    vtx_data.raw_position = position;
+    vtx_data.worldspace_position = model * position;
+    vtx_data.eyespace_position =  view_without_translation * vtx_data.worldspace_position;
+
+    gl_Position = (projection * vtx_data.eyespace_position).xyww;
+}

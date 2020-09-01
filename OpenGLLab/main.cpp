@@ -57,6 +57,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	//environment shader
+	Shader defaultshader("Shaders/shadowmapvs.glsl", "Shaders/shadowmapfs.glsl");
 	Shader environshader("Shaders/environmentvs.glsl", "Shaders/environmentfs.glsl");
 	Shader modelshader("Shaders/modelload_vs.glsl", "Shaders/modelload_fs.glsl");
 	Shader watershader("Shaders/watervs.glsl", "Shaders/waterfs.glsl");
@@ -83,63 +84,38 @@ int main()
 	//SceneNode* castlex = new SceneNode(castle, "bush");
 	//root2->AddChild(castlex);
 
-	
+	Model scifi("Model/scifi.obj");
+
 	//No Shadow Scene
 	Light light01;
 	DirectionLight dirLight;
 	PointLight pointLight;
 	PointLight pointLight02;
 	SpotLight spotLight01;
-	Model landx("Model/swing.obj");
-	Model bush("Model/land/bush.obj");
-	Model campfire("Model/land/campfire.obj");
-	Model mushroom("Model/land/mushroom.obj");
-	Model tree("Model/land/tree.obj");
-	Model lamp("Model/land/lamp01.obj");
-	Model piano("Model/POD.obj");
+
+	//Models
+	Model landx("Model/marblefloor.obj");
+	Model pod("Model/POD.obj");
+	Model twobsan("Model/2Bsan.obj");
 	Model empty("");
 
+	//SceneNodes
 	SceneNode* root = new SceneNode(landx, "Base");
-
-	SceneNode* trees = new SceneNode(empty, "Trees");
-	SceneNode* mushrooms = new SceneNode(empty, "Mushroom");
-	SceneNode* bush_child = new SceneNode(bush, "bush");
-	SceneNode* tree_child = new SceneNode(tree, "tree");
-	SceneNode* tree_child01 = new SceneNode(tree, "tree01");
-	SceneNode* campfire_child = new SceneNode(campfire, "campfire");
-	SceneNode* mushroom_child01 = new SceneNode(mushroom, "mushroom01");
-	SceneNode* mushroom_child02 = new SceneNode(mushroom, "mushroom02");
-	SceneNode* mushroom_child03 = new SceneNode(mushroom, "mushroom03");
-	SceneNode* lamp_child = new SceneNode(lamp, "lamp");
 	SceneNode* pianox[4];
+	SceneNode* floor = new SceneNode(landx, "floor");
+	SceneNode* twob = new SceneNode(twobsan, "2bsan");
 
 	const char* namex = "Pod0";
-	for (int i = 0; i < 4; i++) {
-		pianox[i] = new SceneNode(landx, namex);
+	/*for (int i = 0; i < 4; i++) {
+		pianox[i] = new SceneNode(pod, namex);
 		root->AddChild(pianox[i]);
-	}
+	}*/
+	root->worldScale = glm::vec3(1, 1, 1);
+	root->AddChild(floor);
+	root->AddChild(twob);
 
-	//trees->AddChild(tree_child);
-	//trees->AddChild(tree_child01);
-	//lamp_child->AddChild(campfire_child);
-	//mushrooms->AddChild(mushroom_child01);
-	//mushrooms->AddChild(mushroom_child02);
-	//mushrooms->AddChild(mushroom_child03);
-	//root->AddChild(trees);
-	//root->AddChild(lamp_child);
-	//root->AddChild(mushrooms);
 
 	//cout<< root->FindNodeInChildsByName("campfire")->name <<endl;
-
-	tree_child->transform = glm::vec3(-2, 0, -3);
-	tree_child01->transform = glm::vec3(3, 0, -2);
-	bush_child->transform = glm::vec3(6, 0, -4);
-	campfire_child->transform = glm::vec3(2, 0, -11);
-	mushroom_child01->transform = glm::vec3(-2, 0, -10);
-	mushroom_child02->transform = glm::vec3(4, 0, -5);
-	mushroom_child03->transform = glm::vec3(3, 0, -2);
-	lamp_child->transform = glm::vec3(8.6f, 1.14f, -2.3f);
-	root->worldScale = glm::vec3(0.4, 0.4, 0.4);
 
 	// Configure depth map FBO
 	const GLuint SHADOW_WIDTH = 1500, SHADOW_HEIGHT = 1500;
@@ -205,41 +181,43 @@ int main()
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 
-		
+		//for (int i = 0; i < 4; i++) {
+		//	pianox[i]->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
+		//	pianox[i]->scale = 2;
+		//	pianox[i]->transform = glm::vec3(pos[0]+10*i-20, pos[1], pos[2]);
+		//	pianox[i]->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);	
+		//}
 
-		for (int i = 0; i < 4; i++) {
-			pianox[i]->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
-			pianox[i]->scale = 2;
-			pianox[i]->transform = glm::vec3(pos[0]+10*i-20, pos[1], pos[2]);
-			pianox[i]->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);
+		twob->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
 
-			root->modelScale = glm::vec3(scale[0], scale[1], scale[2]);
-			root->scale = 2;
-			root->transform = glm::vec3(pos[0] + 10 * i - 20, pos[1], pos[2]);
-			root->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);
-		}
+		twob->transform = glm::vec3(pos[0], pos[1], pos[2]);
+		twob->rotation = glm::vec3(rotation[0], rotation[1], rotation[2]);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		
-		shader.use();
+		defaultshader.use();
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		view = camera.GetViewMatrix();
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-		shader.setVec3("viewPos", camera.Position);
-		shader.setVec3("lightPos", lightPos);
-		shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+		defaultshader.setMat4("projection", projection);
+		defaultshader.setMat4("view", view);
+		defaultshader.setVec3("viewPos", camera.Position);
+		defaultshader.setVec3("lightPos", lightposition);
+		defaultshader.setFloat("lightintensity", lightintensity);
+		defaultshader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 		glActiveTexture(GL_TEXTURE0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 
 		if (transform_isvisible) {
-			pianox[2]->SetVisible(transform_isvisible);
+			twob->SetVisible(transform_isvisible);
 		}
 		else {
-			pianox[2]->SetVisible(transform_isvisible);
+			twob->SetVisible(transform_isvisible);
 		}
+
+		root->worldTransform = glm::vec3(0, -10, 0);
+		root->Draw(camera, defaultshader);
 
 		//cout << (pianox[2]->isVisible) << endl;
 
@@ -262,20 +240,21 @@ int main()
 		modelshader.setFloat("material.shininess", 32.0f);
 
 		//dir light
-		dirLight.direction = glm::vec3(-1, 1, -1);
-		dirLight.diffuse = glm::vec3(-1, -0.04, 0.9);
+		dirLight.direction = glm::vec3(lightrotation[0], lightrotation[1], lightrotation[2]);
+		dirLight.diffuse = glm::vec3(lightcolor.x, lightcolor.y, lightcolor.z);
 		light01.RenderDirLight(modelshader, dirLight);
 		//campfire
 		pointLight.position = glm::vec3(3.4f, -9, -6);
 		pointLight.ambient = glm::vec3(1.0f, 0, 0);
 		pointLight.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 		//pointLight.position = glm::vec3(litposx, litposy, litposz);
-		light01.RenderPointLight(modelshader, pointLight);
+		//light01.RenderPointLight(modelshader, pointLight);
 		//spot light
 		//spotLight01.position = glm::vec3(litposx, litposy, litposz);
 		spotLight01.position = glm::vec3(5.4, -5.4, -3);
 		spotLight01.direction = glm::vec3(0, -1, 0);
-		light01.RenderSpotLight(modelshader, spotLight01);
+		spotLight01.color = glm::vec3(1, 0, 0);
+		//light01.RenderSpotLight(modelshader, spotLight01);
 
 		model = glm::mat4(1.0f);
 		view = camera.GetViewMatrix();
@@ -284,8 +263,7 @@ int main()
 		modelshader.setMat4("view", view);
 		modelshader.setMat4("projection", projection);
 		modelshader.setVec3("cameraPos", camera.Position);
-		root->worldTransform = glm::vec3(4, -26, -3);
-		root->Draw(camera, modelshader);
+
 
 		sky.DrawSkyBox(camera, sky.shader);
 		ui.Render(window);

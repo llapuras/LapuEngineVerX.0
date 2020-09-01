@@ -211,6 +211,8 @@
     <None Include="Shaders\skyboxfs.glsl" />
     <None Include="Shaders\skyboxvs.glsl" />
     <None Include="Shaders\specular_fs.glsl" />
+    <None Include="Shaders\toon_fs.glsl" />
+    <None Include="Shaders\toon_vs.glsl" />
     <None Include="Shaders\vs.glsl" />
     <None Include="Shaders\waterfs.glsl" />
     <None Include="Shaders\watervs.glsl" />

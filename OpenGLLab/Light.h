@@ -21,6 +21,7 @@ struct DirectionLight {
 	glm::vec3 ambient = glm::vec3(0.2f, 0.2f, 0.2f);
 	glm::vec3 diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
 	glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	float intensity = 1.0f;
 };
 
 struct PointLight {
@@ -56,6 +57,7 @@ public:
 		shader.setVec3("dirLight.ambient", dirLight.ambient);
 		shader.setVec3("dirLight.diffuse", dirLight.diffuse);
 		shader.setVec3("dirLight.specular", dirLight.specular);
+		shader.setFloat("dirLight.intensity", dirLight.intensity);
 	}
 
 	void RenderPointLight(Shader shader, PointLight pointLight)

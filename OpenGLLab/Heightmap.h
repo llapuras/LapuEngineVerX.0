@@ -21,8 +21,8 @@ public:
 	unsigned int normalMap = imgloader.loadTexture("Images/terrain01normal.jpg");
 	unsigned int heightMap = imgloader.loadTexture("Images/fbm.png");
 	unsigned int watertexture = imgloader.loadTexture("Images/water.jpg");
-	unsigned int brickdiffuseMap = imgloader.loadTexture("Images/bricks.jpg");
-	unsigned int bricknormalMap = imgloader.loadTexture("Images/bricks2_normal.jpg");
+	unsigned int brickdiffuseMap = imgloader.loadTexture("Images/water.jpg");
+	unsigned int bricknormalMap = imgloader.loadTexture("Images/water.jpg");
 
 	Heightmap() {
 		shader = Shader("Shaders/watervs.glsl", "Shaders/waterfs.glsl");

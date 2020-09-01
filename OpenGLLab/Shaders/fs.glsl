@@ -33,12 +33,15 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;  
-
 	vec3 result = (ambient + diffuse + specular) * objectColor;
+    
+    vec4 texColor = texture(texture1, TexCoord);
+    if(texColor.a < 0.1)
+        discard;
 
 	// linearly interpolate between both textures (80% container, 20% awesomeface)
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.1) * vec4(result, 0.5);
-	//FragColor = vec4(result, 1.0);
+	//FragColor = mix(texColor, texture(texture2, TexCoord), 0.1) * vec4(result, 0.5);
+	FragColor = vec4(texColor, 1.0);
 
 }
 

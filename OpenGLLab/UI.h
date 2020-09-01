@@ -31,10 +31,21 @@ bool autoMove = false;
 
 bool transform_isvisible = true;
 
-float pos[3] = { 1.0f,1.0f,1.0f};
-float scale[3] = { 1.0f,1.0f,1.0f};
+//transform
+float pos[3] = { 0.0f,7.0f,0.0f};
+float scale[3] = { 3.0f,3.0f,3.0f};
 float rotation[3] = { 1.0f,1.0f,1.0f };
 
+//light
+glm::vec3 lightposition = glm::vec3(1.0f,1.0f,1.0f);
+float lightrotation[3] = { 1.0f,1.0f,1.0f };
+float lightintensity = 1.0f;
+ImVec4 lightcolor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+//skybox
+ImVec4 skytopcolor = ImVec4(1.0f, 0.87f, 1.0f, 1.0f);
+ImVec4 skyhorizoncolor = ImVec4(0.91f, 1.0f, 0.98f, 1.0f);
+float horizonintensity = 5;
 
 //water
 float DRAG_MULT = .001f;
@@ -94,9 +105,7 @@ public:
 		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 		ImGui::SetNextWindowSize(boardSize);
 		SceneTreeBoard(); 
-		static bool selection[] = { false, false, false, false, false };
-
-
+		
 		ImGui::SetNextWindowPos(window_pos2, ImGuiCond_Always, window_pos_pivot2);
 		ImGui::SetNextWindowSize(boardSize);
 		InspectorBoard();
@@ -105,34 +114,14 @@ public:
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	};
 
-	void DrawSceneTree(SceneNode* xnode) {
-		if (xnode != nullptr) {		
-			//cout << xnode->GetChildCounts() << endl;
-			if (xnode->GetChildCounts() > 1) {
-				bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)xnode->name, ImGuiTreeNodeFlags_DefaultOpen, xnode->name, xnode->name);
-				if (ImGui::IsItemClicked()) {
-					node_clicked = xnode->name;
-					cout << xnode->name << endl;
-				}
-				if (node_open)
-				{
-					for (vector <SceneNode*>::const_iterator i = xnode->GetChildIteratorStart(); i != xnode->GetChildIteratorEnd(); ++i)
-					{
-						DrawSceneTree(*i);
-					}
-					ImGui::TreePop();
-				}
-			}
-			else {	
-				ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
-				if (ImGui::IsItemClicked()) {
-					node_clicked = xnode->name;
-					cout << xnode->name << endl;
-				}
-			}
-		}		
-	}
 	
+	void SkyBoxPanel() {
+		if (ImGui::CollapsingHeader("SkyBox Panel")) {
+			ImGui::ColorEdit4("Sky Top Color", (float*)&skytopcolor);
+			ImGui::ColorEdit4("Sky Horizon Color", (float*)&skyhorizoncolor);
+			ImGui::DragFloat("Horizon Intensity", &horizonintensity, 1, 0.0f, 100.0f, "%.1f");   // Scale only this font
+		}
+	}
 
 	bool SceneTreeBoard() {
 		int obj_selected = -1;
@@ -151,33 +140,40 @@ public:
 		for (int i = 0; i < IM_ARRAYSIZE(lines); i++)
 			if (filter.PassFilter(lines[i]))
 				ImGui::BulletText("%s", lines[i]);
-
 		ImGui::Separator();
-
 		//scene list
 		DrawSceneTree(ui_root);
-
-
-
-
 		ImGui::End();
+	}
 
+	void TransformPanel() {
+		//visible
+		if (ImGui::CollapsingHeader("Transform Panel")) {
+			ImGui::Checkbox("is visible", &transform_isvisible);
+
+			ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
+			ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
+			ImGui::DragFloat3("Rotation", (float*)&rotation, 1.0f, -360.0f, 360, "%.0f");
+		}
+	}
+
+	void LightPanel() {
+		if (ImGui::CollapsingHeader("Light Panel")) {
+			ImGui::DragFloat3("Light Position", (float*)&lightposition, 0.01f, -200.0f, 200.0f, "%.0f");
+			ImGui::DragFloat3("Light Rotation", (float*)&lightrotation, 1.0f, -360.0f, 360, "%.0f");
+			ImGui::ColorEdit3("Light Color", (float*)&lightcolor);
+			ImGui::SliderFloat("float", &lightintensity, 0.0f, 5.0f);
+		}
 	}
 
 	bool InspectorBoard() {
 
-		ImGui::Begin("Transform", NULL);
+		ImGui::Begin("Controller", NULL);
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if (window->SkipItems)
 			return false;
 		
-		//visible
-		ImGui::Checkbox("is visible", &transform_isvisible);
-
-		ImGui::DragFloat3("Position", (float*)&pos, 0.01f, -200.0f, 200.0f, "%.0f");
-		ImGui::DragFloat3("Scale", (float*)&scale, 0.01f, -200.0f, 200.0f, "%.0f");
-		ImGui::DragFloat3("Rotation", (float*)&rotation, 1.0f, -360.0f, 360, "%.0f");
-
+		TransformPanel();
 
 		//object info
 		ImGui::Separator();
@@ -193,9 +189,42 @@ public:
 
 		ImGui::Separator();
 		
+		LightPanel();
+
+		ImGui::Separator();
+
+		SkyBoxPanel();
+
 		ImGui::End();
 	}
 
+	void DrawSceneTree(SceneNode* xnode) {
+		if (xnode != nullptr) {
+			//cout << xnode->GetChildCounts() << endl;
+			if (xnode->GetChildCounts() > 1) {
+				bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)xnode->name, ImGuiTreeNodeFlags_DefaultOpen, xnode->name, xnode->name);
+				if (ImGui::IsItemClicked()) {
+					node_clicked = xnode->name;
+					cout << xnode->name << endl;
+				}
+				if (node_open)
+				{
+					for (vector <SceneNode*>::const_iterator i = xnode->GetChildIteratorStart(); i != xnode->GetChildIteratorEnd(); ++i)
+					{
+						DrawSceneTree(*i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			else {
+				ImGui::TreeNodeEx(xnode->name, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+				if (ImGui::IsItemClicked()) {
+					node_clicked = xnode->name;
+					cout << xnode->name << endl;
+				}
+			}
+		}
+	}
 
 	bool GolfGameMainMenu() {
 		
