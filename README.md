@@ -2,25 +2,35 @@
 
 A coarse opengl renderer.
 
-### TBC 
+### TBC 🚧
  
 - procedural skybox
     - Gradient color ✅
     - Starry Sky ⬜
+    - Cloudy Sky ⬜
     - Day and Night ⬜
 
 - shadow
-- light system
+    - Fix Bugs 🚧
+
+- light system 
+    - Direcional Light 🚧
+    - Spot Light 🚧
+    - Point Light 🚧
+
+- Shader
+    - ...
 
 
-### Todo
+
+### Todo ⬜
 
 - fbx model rendering
 - animation
 - particle system
 
 
-### Finished
+### Finished ✅
 
 - obj model rendering
 
