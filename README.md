@@ -6,11 +6,13 @@ A coarse opengl renderer.
 
 ### TBC 🚧
  
-- procedural skybox
-    - Gradient color ✅
-    - Starry Sky ⬜
-    - Cloudy Sky ⬜
-    - Day and Night ⬜
+- Skybox
+    - cubemap ✅
+    - procedural skybox
+        - Gradient color ✅
+        - Starry Sky ⬜
+        - Cloudy Sky ⬜
+        - Day and Night ⬜
 
 - shadow
     - Fix Bugs 🚧
