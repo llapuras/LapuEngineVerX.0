@@ -2,6 +2,8 @@
 
 A coarse opengl renderer.
 
+![](https://github.com/llapuras/LapuEngineVerX.0/blob/master/display/1.png)
+
 ### TBC 🚧
  
 - procedural skybox
@@ -33,7 +35,3 @@ A coarse opengl renderer.
 ### Finished ✅
 
 - obj model rendering
-
-
-
-![](https://github.com/llapuras/LapuEngineVerX.0/blob/master/display/1.png)
